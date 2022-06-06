@@ -1,29 +1,47 @@
+noseX = 0;
+noseY = 0;
+leftWrist = 0;
+rightWrist= 0;
+difference = 0;
+
 function setup() {
     video = createCapture(VIDEO);
-    video.size(550,500);
+    video.size(400,500);
+    video.position(100,500)
 
-    canvas = createCanvas(550,550);
-    canvas.position(500,150);
-    poseNet=ml5.poseNet(video, modelLoaded);
+    canvas = createCanvas(700,700);
+    canvas.position(560,500);
+    poseNet = ml5.poseNet(video, modelLoaded);
+    poseNet.on('pose',gotPoses);
 }
 
-function modelLoaded() {
-    console.log("PoseNet is Initialized.")
+function modelLoaded(){
+    console.log("PoseNet is initialized!");
 }
-function gotPoses(results);
-{
-    if (results.length > 0)
+function gotPoses(results){
+   
+    if(results.length > 0)
+
     {
-        console.log(results);
-        leftWristX = results[0].pose.leftWrist.x;
-        rightWristX = results[0].pose.rightWrist.x;
-        differewnce = floor(leftWristX - rightWristX);
+    
+    console.log(results);
+   noseX = results[0].pose.nose.x;
+    noseY = results[0].pose.nose.y;
+    console.log("noseX = " + noseX +"noseY =" +noseY);
+    leftWrist = results[0].pose.leftWrist.x;
+    rightWrist = results[0].pose.rightWrist.x;
+    console.log(leftWrist, rightWrist);
+    difference = floor(leftWrist-rightWrist);
     }
 }
 
-function draw() {
-    background('#000000')
-     textSize(difference);
-     fill('#FFFFFF')
-     text('Vinay', 50, 400);
+function draw(){
+    background('#808080');
+    document.getElementById("square_side").innerHTML = "Width and Height of the Square will be " + difference +"px";
+    fill('#000000');
+    stroke('#000000');
+    textSize(difference);
+    text("Vinay",noseX,noseY);
+    
+   
 }
